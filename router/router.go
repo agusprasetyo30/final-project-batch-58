@@ -2,7 +2,6 @@ package router
 
 import (
 	"final-project/controllers"
-	"final-project/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +12,22 @@ func SetupRouter() *gin.Engine {
 	r.POST("/login", controllers.Login)
 	r.POST("/register", controllers.Register)
 
-	r.Use(middleware.AuthMiddleware())
+	api := r.Group("/api")
+
+	class := api.Group("/class")
+	class.GET("/", controllers.GetAllClasses)
+	class.POST("/", controllers.InsertClass)
+	class.GET("/:id", controllers.GetClass)
+	class.PUT("/:id", controllers.UpdateClass)
+	class.DELETE("/:id", controllers.DeleteClass)
+	// class.GET("/:id", controllers.getClass)
+	// class.POST("/:id/edit", controllers.InsertClass)
+	// class.POST("/:id/aaaaaa", controllers.InsertClass)
+
+	// mapel := api.Group("/mapel")
+	// mapel.POST("/", controllers.InsertClass)
+
+	// r.Use(middleware.AuthMiddleware())
 
 	// api := r.Group("/api")
 	// api.Use(middleware.AuthMiddleware())
