@@ -10,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllMapel(c *gin.Context) {
+func GetAllCource(c *gin.Context) {
 	var (
 		result gin.H
 	)
 
-	categories, err := repository.GetAllMapel(database.DbConnection)
+	categories, err := repository.GetAllCource(database.DbConnection)
 
 	if err != nil {
 		result = gin.H{
@@ -30,22 +30,22 @@ func GetAllMapel(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func GetMapel(c *gin.Context) {
+func GetCource(c *gin.Context) {
 	var (
 		result gin.H
-		mapel  model.Mapel
+		cource model.Cource
 	)
 
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := c.BindJSON(&mapel)
+	err := c.BindJSON(&cource)
 	if err != nil {
 		panic(err)
 	}
 
-	mapel.ID = id
+	cource.ID = id
 
-	data, err := repository.GetMapel(database.DbConnection, mapel)
+	data, err := repository.GetCource(database.DbConnection, cource)
 
 	if err != nil {
 		result = gin.H{
@@ -60,15 +60,15 @@ func GetMapel(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func InsertMapel(c *gin.Context) {
-	mapel := &model.Mapel{}
+func InsertCource(c *gin.Context) {
+	cource := &model.Cource{}
 
-	err := c.BindJSON(mapel)
+	err := c.BindJSON(cource)
 	if err != nil {
 		panic(err)
 	}
 
-	data, err := repository.InsertMapel(database.DbConnection, *mapel)
+	data, err := repository.InsertCource(database.DbConnection, *cource)
 	if err != nil {
 		panic(err)
 	}
@@ -76,26 +76,26 @@ func InsertMapel(c *gin.Context) {
 	c.JSON(http.StatusCreated, data)
 }
 
-func UpdateMapel(c *gin.Context) {
-	var mapel model.Mapel
+func UpdateCource(c *gin.Context) {
+	var cource model.Cource
 
 	// Mengambil ID dari parameter
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := c.BindJSON(&mapel)
+	err := c.BindJSON(&cource)
 	if err != nil {
 		panic(err)
 	}
 
-	mapel.ID = id
+	cource.ID = id
 
-	err = repository.UpdateMapel(database.DbConnection, mapel)
+	err = repository.UpdateCource(database.DbConnection, cource)
 	if err != nil {
 		panic(err)
 	}
 
 	// Digunakan untuk return data select sesuai dengan category yang dipilih
-	selectCategory, err := repository.GetMapel(database.DbConnection, mapel)
+	selectCategory, err := repository.GetCource(database.DbConnection, cource)
 
 	if err != nil {
 		panic(err)
@@ -106,17 +106,17 @@ func UpdateMapel(c *gin.Context) {
 	})
 }
 
-func DeleteMapel(c *gin.Context) {
-	var mapel model.Mapel
+func DeleteCource(c *gin.Context) {
+	var cource model.Cource
 
 	// Mengambil ID dari parameter
 	id, _ := strconv.Atoi(c.Param("id"))
-	mapel.ID = id
+	cource.ID = id
 
-	err := repository.DeleteMapel(database.DbConnection, mapel)
+	err := repository.DeleteCource(database.DbConnection, cource)
 	if err != nil {
-		if err.Error() == "mapel not found" {
-			c.JSON(http.StatusNotFound, gin.H{"error": "mapel not found"})
+		if err.Error() == "cource not found" {
+			c.JSON(http.StatusNotFound, gin.H{"error": "cource not found"})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
