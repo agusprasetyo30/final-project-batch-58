@@ -14,12 +14,22 @@ func SetupRouter() *gin.Engine {
 
 	api := r.Group("/api")
 
+	// Class / Kelas
 	class := api.Group("/class")
 	class.GET("/", controllers.GetAllClasses)
 	class.POST("/", controllers.InsertClass)
 	class.GET("/:id", controllers.GetClass)
 	class.PUT("/:id", controllers.UpdateClass)
 	class.DELETE("/:id", controllers.DeleteClass)
+
+	// mapel / Mata Pelajaran
+	mapel := api.Group("/mata-pelajaran")
+	mapel.GET("/", controllers.GetAllMapel)
+	mapel.POST("/", controllers.InsertMapel)
+	mapel.GET("/:id", controllers.GetMapel)
+	mapel.PUT("/:id", controllers.UpdateMapel)
+	mapel.DELETE("/:id", controllers.DeleteMapel)
+
 	// class.GET("/:id", controllers.getClass)
 	// class.POST("/:id/edit", controllers.InsertClass)
 	// class.POST("/:id/aaaaaa", controllers.InsertClass)
