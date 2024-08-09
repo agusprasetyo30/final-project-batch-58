@@ -10,12 +10,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllCource(c *gin.Context) {
+func GetAllStudents(c *gin.Context) {
 	var (
 		result gin.H
 	)
 
-	categories, err := repository.GetAllCource(database.DbConnection)
+	students, err := repository.GetAllStudents(database.DbConnection)
 
 	if err != nil {
 		result = gin.H{
@@ -23,30 +23,29 @@ func GetAllCource(c *gin.Context) {
 		}
 	} else {
 		result = gin.H{
-			"result": categories,
+			"result": students,
 		}
 	}
 
 	c.JSON(http.StatusOK, result)
 }
 
-func GetCource(c *gin.Context) {
+func GetStudent(c *gin.Context) {
 	var (
-		result gin.H
-		cource model.Cource
+		result  gin.H
+		student model.Student
 	)
 
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := c.BindJSON(&cource)
+	err := c.BindJSON(&student)
 	if err != nil {
 		panic(err)
 	}
 
-	cource.ID = id
+	student.ID = id
 
-	data, err := repository.GetCource(database.DbConnection, cource)
-
+	data, err := repository.GetStudent(database.DbConnection, student)
 	if err != nil {
 		result = gin.H{
 			"result": err.Error(),
@@ -60,15 +59,15 @@ func GetCource(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func InsertCource(c *gin.Context) {
-	cource := &model.Cource{}
+func InsertStudent(c *gin.Context) {
+	student := &model.Student{}
 
-	err := c.BindJSON(cource)
+	err := c.ShouldBindJSON(student)
 	if err != nil {
 		panic(err)
 	}
 
-	data, err := repository.InsertCource(database.DbConnection, *cource)
+	data, err := repository.InsertStudent(database.DbConnection, *student)
 	if err != nil {
 		panic(err)
 	}
@@ -76,47 +75,47 @@ func InsertCource(c *gin.Context) {
 	c.JSON(http.StatusCreated, data)
 }
 
-func UpdateCource(c *gin.Context) {
-	var cource model.Cource
+func UpdateStudent(c *gin.Context) {
+	var student model.Student
 
 	// Mengambil ID dari parameter
 	id, _ := strconv.Atoi(c.Param("id"))
 
-	err := c.BindJSON(&cource)
+	err := c.BindJSON(&student)
 	if err != nil {
 		panic(err)
 	}
 
-	cource.ID = id
+	student.ID = id
 
-	err = repository.UpdateCource(database.DbConnection, cource)
+	err = repository.UpdateStudent(database.DbConnection, student)
 	if err != nil {
 		panic(err)
 	}
 
 	// Digunakan untuk return data select sesuai dengan category yang dipilih
-	selectCategory, err := repository.GetCource(database.DbConnection, cource)
+	selectStudent, err := repository.GetStudent(database.DbConnection, student)
 
 	if err != nil {
 		panic(err)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"result": selectCategory,
+		"result": selectStudent,
 	})
 }
 
-func DeleteCource(c *gin.Context) {
-	var cource model.Cource
+func DeleteStudent(c *gin.Context) {
+	var student model.Student
 
 	// Mengambil ID dari parameter
 	id, _ := strconv.Atoi(c.Param("id"))
-	cource.ID = id
+	student.ID = id
 
-	err := repository.DeleteCource(database.DbConnection, cource)
+	err := repository.DeleteStudent(database.DbConnection, student)
 	if err != nil {
 		if err.Error() == "cource not found" {
-			c.JSON(http.StatusNotFound, gin.H{"error": "cource not found"})
+			c.JSON(http.StatusNotFound, gin.H{"error": "student not found"})
 		} else {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
@@ -124,6 +123,6 @@ func DeleteCource(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"result": "Delete cources success",
+		"result": "Delete student success",
 	})
 }

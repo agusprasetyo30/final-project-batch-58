@@ -23,12 +23,20 @@ func SetupRouter() *gin.Engine {
 	class.DELETE("/:id", controllers.DeleteClass)
 
 	// Cource / Mata Pelajaran
-	mapel := api.Group("/cource")
-	mapel.GET("/", controllers.GetAllCource)
-	mapel.POST("/", controllers.InsertCource)
-	mapel.GET("/:id", controllers.GetCource)
-	mapel.PUT("/:id", controllers.UpdateCource)
-	mapel.DELETE("/:id", controllers.DeleteCource)
+	cource := api.Group("/cource")
+	cource.GET("/", controllers.GetAllCource)
+	cource.POST("/", controllers.InsertCource)
+	cource.GET("/:id", controllers.GetCource)
+	cource.PUT("/:id", controllers.UpdateCource)
+	cource.DELETE("/:id", controllers.DeleteCource)
+
+	// Student / Siswa
+	student := api.Group("/student")
+	student.GET("/", controllers.GetAllStudents)
+	student.POST("/", controllers.InsertStudent)
+	student.GET("/:id", controllers.GetStudent)
+	student.PUT("/:id", controllers.UpdateStudent)
+	student.DELETE("/:id", controllers.DeleteStudent)
 
 	// class.GET("/:id", controllers.getClass)
 	// class.POST("/:id/edit", controllers.InsertClass)
