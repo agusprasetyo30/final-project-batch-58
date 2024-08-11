@@ -53,7 +53,7 @@ func RoleMiddleware(role string) gin.HandlerFunc {
 		}
 
 		if user.(*model.User).Role != role {
-			helper.RespondWithError(c, http.StatusForbidden, "Forbidden")
+			helper.RespondWithError(c, http.StatusForbidden, "Forbidden Role")
 			c.Abort()
 			return
 		}

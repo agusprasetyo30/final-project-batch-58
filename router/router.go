@@ -2,6 +2,7 @@ package router
 
 import (
 	"final-project/controllers"
+	"final-project/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,64 +14,41 @@ func SetupRouter() *gin.Engine {
 	r.POST("/register", controllers.Register)
 
 	api := r.Group("/api")
+	api.Use(middleware.AuthMiddleware())
 
 	// Class / Kelas
 	class := api.Group("/class")
 	class.GET("/", controllers.GetAllClasses)
-	class.POST("/", controllers.InsertClass)
+	class.POST("/", middleware.RoleMiddleware("ADMIN"), controllers.InsertClass)
 	class.GET("/:id", controllers.GetClass)
-	class.PUT("/:id", controllers.UpdateClass)
-	class.DELETE("/:id", controllers.DeleteClass)
+	class.PUT("/:id", middleware.RoleMiddleware("ADMIN"), controllers.UpdateClass)
+	class.DELETE("/:id", middleware.RoleMiddleware("ADMIN"), controllers.DeleteClass)
 
-	// Cource / Mata Pelajaran
-	cource := api.Group("/cource")
-	cource.GET("/", controllers.GetAllCource)
-	cource.POST("/", controllers.InsertCource)
-	cource.GET("/:id", controllers.GetCource)
-	cource.PUT("/:id", controllers.UpdateCource)
-	cource.DELETE("/:id", controllers.DeleteCource)
+	// Course / Mata Pelajaran
+	course := api.Group("/course")
+	course.GET("/", controllers.GetAllCourse)
+	course.POST("/", middleware.RoleMiddleware("ADMIN"), controllers.InsertCourse)
+	course.GET("/:id", controllers.GetCourse)
+	course.PUT("/:id", middleware.RoleMiddleware("ADMIN"), controllers.UpdateCourse)
+	course.DELETE("/:id", middleware.RoleMiddleware("ADMIN"), controllers.DeleteCourse)
 
 	// Student / Siswa
 	student := api.Group("/student")
 	student.GET("/", controllers.GetAllStudents)
-	student.POST("/", controllers.InsertStudent)
+	student.GET("/class/:class_id", controllers.GetStudentByClass)
+	student.GET("/:id/cources", controllers.GetStudentCourse)
+	student.POST("/", middleware.RoleMiddleware("ADMIN"), controllers.InsertStudent)
 	student.GET("/:id", controllers.GetStudent)
-	student.PUT("/:id", controllers.UpdateStudent)
-	student.DELETE("/:id", controllers.DeleteStudent)
+	student.PUT("/:id", middleware.RoleMiddleware("ADMIN"), controllers.UpdateStudent)
+	student.DELETE("/:id", middleware.RoleMiddleware("ADMIN"), controllers.DeleteStudent)
 
 	// Assessment / Penilaian
 	assessment := api.Group("/assessment")
 	assessment.GET("/", controllers.GetAllAssessment)
-	assessment.POST("/", controllers.InsertAssessment)
+	assessment.POST("/", middleware.RoleMiddleware("ADMIN"), controllers.InsertAssessment)
 	assessment.GET("/:id", controllers.GetAssessment)
-	assessment.PUT("/:id", controllers.UpdateAssessment)
-	assessment.DELETE("/:id", controllers.DeleteAssessment)
-
-	// class.GET("/:id", controllers.getClass)
-	// class.POST("/:id/edit", controllers.InsertClass)
-	// class.POST("/:id/aaaaaa", controllers.InsertClass)
-
-	// mapel := api.Group("/mapel")
-	// mapel.POST("/", controllers.InsertClass)
-
-	// r.Use(middleware.AuthMiddleware())
-
-	// api := r.Group("/api")
-	// api.Use(middleware.AuthMiddleware())
-	// {
-	// 	api.GET("/protected", protectedHandler)
-	// 	api.GET("/admin", middleware.RoleMiddleware("admin"), adminHandler)
-	// }
-
-	// router.Use(middleware.AuthMiddleware())
+	assessment.PUT("/:id", middleware.RoleMiddleware("ADMIN"), controllers.UpdateAssessment)
+	assessment.DELETE("/:id", middleware.RoleMiddleware("ADMIN"), controllers.DeleteAssessment)
 
 	return r
 }
-
-// func protectedHandler(c *gin.Context) {
-// 	c.JSON(http.StatusOK, gin.H{"message": "This is a protected route"})
-// }
-
-// func adminHandler(c *gin.Context) {
-// 	c.JSON(http.StatusOK, gin.H{"message": "This is an admin route"})
-// }

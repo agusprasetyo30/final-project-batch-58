@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetAllCource(c *gin.Context) {
+func GetAllCourse(c *gin.Context) {
 	var (
 		result gin.H
 	)
@@ -30,7 +30,7 @@ func GetAllCource(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func GetCource(c *gin.Context) {
+func GetCourse(c *gin.Context) {
 	var (
 		result gin.H
 		cource model.Cource
@@ -60,7 +60,7 @@ func GetCource(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
-func InsertCource(c *gin.Context) {
+func InsertCourse(c *gin.Context) {
 	cource := &model.Cource{}
 
 	err := c.BindJSON(cource)
@@ -76,7 +76,7 @@ func InsertCource(c *gin.Context) {
 	c.JSON(http.StatusCreated, data)
 }
 
-func UpdateCource(c *gin.Context) {
+func UpdateCourse(c *gin.Context) {
 	var cource model.Cource
 
 	// Mengambil ID dari parameter
@@ -106,7 +106,7 @@ func UpdateCource(c *gin.Context) {
 	})
 }
 
-func DeleteCource(c *gin.Context) {
+func DeleteCourse(c *gin.Context) {
 	var cource model.Cource
 
 	// Mengambil ID dari parameter

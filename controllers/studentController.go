@@ -126,3 +126,54 @@ func DeleteStudent(c *gin.Context) {
 		"result": "Delete student success",
 	})
 }
+
+func GetStudentByClass(c *gin.Context) {
+	var (
+		result gin.H
+	)
+
+	class_id, _ := strconv.Atoi(c.Param("class_id"))
+
+	students, err := repository.GetStudentByClass(database.DbConnection, class_id)
+
+	if err != nil {
+		result = gin.H{
+			"result": err.Error(),
+		}
+	} else {
+		result = gin.H{
+			"result": students,
+		}
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func GetStudentCourse(c *gin.Context) {
+	var (
+		result  gin.H
+		student model.Student
+	)
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	err := c.BindJSON(&student)
+	if err != nil {
+		panic(err)
+	}
+
+	student.ID = id
+
+	data, err := repository.GetStudentCourse(database.DbConnection, id)
+	if err != nil {
+		result = gin.H{
+			"result": err.Error(),
+		}
+	} else {
+		result = gin.H{
+			"result": data,
+		}
+	}
+
+	c.JSON(http.StatusOK, result)
+}
