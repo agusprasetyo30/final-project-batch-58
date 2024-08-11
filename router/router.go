@@ -38,6 +38,14 @@ func SetupRouter() *gin.Engine {
 	student.PUT("/:id", controllers.UpdateStudent)
 	student.DELETE("/:id", controllers.DeleteStudent)
 
+	// Assessment / Penilaian
+	assessment := api.Group("/assessment")
+	assessment.GET("/", controllers.GetAllAssessment)
+	assessment.POST("/", controllers.InsertAssessment)
+	assessment.GET("/:id", controllers.GetAssessment)
+	assessment.PUT("/:id", controllers.UpdateAssessment)
+	assessment.DELETE("/:id", controllers.DeleteAssessment)
+
 	// class.GET("/:id", controllers.getClass)
 	// class.POST("/:id/edit", controllers.InsertClass)
 	// class.POST("/:id/aaaaaa", controllers.InsertClass)
@@ -53,6 +61,8 @@ func SetupRouter() *gin.Engine {
 	// 	api.GET("/protected", protectedHandler)
 	// 	api.GET("/admin", middleware.RoleMiddleware("admin"), adminHandler)
 	// }
+
+	// router.Use(middleware.AuthMiddleware())
 
 	return r
 }

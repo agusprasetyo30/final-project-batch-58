@@ -26,7 +26,6 @@ func GetAllStudents(db *sql.DB) (result []model.Student, err error) {
 		// untuk menampilkan class di relasi
 		classQuery := "SELECT * FROM classes WHERE id = $1"
 		err = db.QueryRow(classQuery, student.ClassID).Scan(&student.Class.ID, &student.Class.Number, &student.Class.Class_type)
-
 		if err != nil {
 			return
 		}
